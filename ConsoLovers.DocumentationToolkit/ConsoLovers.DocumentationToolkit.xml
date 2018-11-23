@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConsoLovers.AutoDoc</name>
+    </assembly>
+    <members>
+        <member name="T:ConsoLovers.DocumentationToolkit.ClassDocumentation">
+            <summary>Gets the documentation for a type</summary>
+            <seealso cref="T:ConsoLovers.DocumentationToolkit.ElementDocumentation"/>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.ClassDocumentation.#ctor(ConsoLovers.DocumentationToolkit.IDocumentationSource,System.Type)">
+            <summary>Initializes a new instance of the <see cref="T:ConsoLovers.DocumentationToolkit.ClassDocumentation"/> class.</summary>
+            <param name="documentationSource">The documentation source.</param>
+            <param name="type">The type.</param>
+            <exception cref="T:System.ArgumentNullException">type</exception>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.ClassDocumentation.Methods">
+            <summary>Gets all available <see cref="T:ConsoLovers.DocumentationToolkit.IMethodDocumentation"/>s for this class.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.ClassDocumentation.OriginalType">
+            <summary>Gets the type the documentation was created for.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.ElementDocumentation.DocumentationSource">
+            <summary>Gets the documentation source for this element.</summary>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.ElementDocumentation.#ctor(ConsoLovers.DocumentationToolkit.IDocumentationSource,System.Reflection.MemberInfo)">
+            <summary>Initializes a new instance of the <see cref="T:ConsoLovers.DocumentationToolkit.ElementDocumentation"/> class.</summary>
+            <param name="documentationSource">The documentation source.</param>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.ElementDocumentation.Summary">
+            <summary>Gets the summary of the documentation.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IClassDocumentation.Methods">
+            <summary>Gets all available <see cref="T:ConsoLovers.DocumentationToolkit.IMethodDocumentation"/>s for this class.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IElementDocumentation.Summary">
+            <summary>Gets the summary.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IMethodDocumentation.Returns">
+            <summary>Gets the returns element.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IMethodDocumentation.Type">
+            <summary>Gets the return type of the method.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IMethodDocumentation.MethodName">
+            <summary>Gets the name of the method.</summary>
+        </member>
+        <member name="T:ConsoLovers.DocumentationToolkit.IParameterDocumentation">
+            <summary>The documentation of a method parameter</summary>
+            <seealso cref="T:ConsoLovers.DocumentationToolkit.IElementDocumentation"/>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IParameterDocumentation.ParameterInfo">
+            <summary>Gets the parameter information.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IParameterDocumentation.Type">
+            <summary>Gets the type of the parameter.</summary>
+        </member>
+        <member name="T:ConsoLovers.DocumentationToolkit.IPropertyDocumentation">
+            <summary>The documentation of a property</summary>
+            <seealso cref="T:ConsoLovers.DocumentationToolkit.IElementDocumentation"/>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.IPropertyDocumentation.Type">
+            <summary>Gets the type of the property.</summary>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.ITypeSelector.SelectTypes">
+            <summary>Selects the types a documentation should be created for.</summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:System.Type"/>s</returns>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.MethodDocumentation.Type">
+            <summary>Gets the type of the return.</summary>
+            <value>The type of the return.</value>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.MethodDocumentation.MethodName">
+            <summary>Gets the name of the method.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.MethodDocumentation.Returns">
+            <summary>Gets the returns element.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.MethodDocumentation.MethodInfo">
+            <summary>Gets the <see cref="T:System.Reflection.MemberInfo"/> for this documentation.</summary>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.ParameterDocumentation.#ctor(System.Reflection.ParameterInfo,ConsoLovers.DocumentationToolkit.IDocumentationSource)">
+            <summary>Initializes a new instance of the <see cref="T:ConsoLovers.DocumentationToolkit.ParameterDocumentation"/> class.</summary>
+            <param name="parameterInfo">The parameter information.</param>
+            <param name="documentationSource">The documentation source.</param>
+            <exception cref="T:System.ArgumentNullException">propertyInfo</exception>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.ParameterDocumentation.Type">
+            <summary>Gets the type of the property.</summary>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.PropertyDocumentation.#ctor(System.Reflection.PropertyInfo,ConsoLovers.DocumentationToolkit.IDocumentationSource)">
+            <summary>Initializes a new instance of the <see cref="T:ConsoLovers.DocumentationToolkit.PropertyDocumentation"/> class.</summary>
+            <param name="propertyInfo">The property information.</param>
+            <param name="documentationSource">The documentation source.</param>
+            <exception cref="T:System.ArgumentNullException">propertyInfo</exception>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.PropertyDocumentation.Type">
+            <summary>Gets the type of the property.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.PropertyDocumentation.PropertyInfo">
+            <summary>Gets the <see cref="T:System.Reflection.MemberInfo"/> for this documentation.</summary>
+        </member>
+        <member name="M:ConsoLovers.DocumentationToolkit.TextElement.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:ConsoLovers.DocumentationToolkit.TextElement"/> class.</summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.TextElement.RawText">
+            <summary>Gets or sets the raw text.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.TextElement.Text">
+            <summary>Gets the text.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.TypeDocumentationCache.Instance">
+            <summary>Gets the instance.</summary>
+        </member>
+        <member name="P:ConsoLovers.DocumentationToolkit.XDocElement.RawText">
+            <summary>Gets or sets the raw text.</summary>
+        </member>
+    </members>
+</doc>
