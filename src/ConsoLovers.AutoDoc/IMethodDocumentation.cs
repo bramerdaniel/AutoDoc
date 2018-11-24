@@ -8,6 +8,7 @@ namespace ConsoLovers.AutoDoc
 {
    using System;
    using System.Collections.Generic;
+   using System.Reflection;
 
    public interface IMethodDocumentation : IElementDocumentation
    {
@@ -23,6 +24,10 @@ namespace ConsoLovers.AutoDoc
       string MethodName { get; }
 
       IReadOnlyCollection<XDoc> Parameters { get; }
+
+      string SignatureString { get; }
+
+      string UserFriendlyReturnTypeName { get; }
 
       #endregion
    }

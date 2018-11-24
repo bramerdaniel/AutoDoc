@@ -10,8 +10,9 @@ namespace ConsoLovers.AutoDoc
    using System.Collections.Generic;
    using System.Linq;
    using System.Reflection;
+   using System.Text;
 
-   public class MethodDocumentation : ElementDocumentation, IMethodDocumentation
+   public class MethodDocumentation : MemberDocumentation, IMethodDocumentation
    {
       #region Constants and Fields
 
@@ -25,6 +26,7 @@ namespace ConsoLovers.AutoDoc
          : base(documentationSource, method)
       {
          MethodInfo = method ?? throw new ArgumentNullException(nameof(method));
+         UserFriendlyReturnTypeName = TypeNameHelper.GetUserFriendlyName(MethodInfo.ReturnType);
       }
 
       #endregion
@@ -49,6 +51,26 @@ namespace ConsoLovers.AutoDoc
       public MethodInfo MethodInfo { get; }
 
       public IReadOnlyCollection<XDoc> Parameters => parameters ?? (parameters = CreateParameters().ToArray());
+
+      public string SignatureString => GetSignature(MethodInfo);
+
+      public string UserFriendlyReturnTypeName { get; }
+
+      private string GetSignature(MethodInfo methodInfo)
+      {
+         var methodParameters = methodInfo.GetParameters();
+         if (methodParameters.Length == 0)
+            return string.Empty;
+
+         StringBuilder builder = new StringBuilder();
+         builder.Append("(");
+         foreach (var parameter in methodParameters)
+            builder.Append(TypeNameHelper.GetUserFriendlyName(parameter.ParameterType) + ",");
+
+         builder.Length -= 1;
+         builder.Append(")");
+         return builder.ToString();
+      }
 
       #endregion
 

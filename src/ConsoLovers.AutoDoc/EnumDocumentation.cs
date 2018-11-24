@@ -8,7 +8,7 @@ namespace ConsoLovers.AutoDoc
 {
    using System;
 
-   public class EnumDocumentation : ElementDocumentation
+   public class EnumDocumentation : MemberDocumentation
    {
       #region Constructors and Destructors
 

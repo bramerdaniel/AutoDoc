@@ -12,8 +12,8 @@ namespace ConsoLovers.AutoDoc
    using System.Reflection;
 
    /// <summary>Gets the documentation for a type</summary>
-   /// <seealso cref="ElementDocumentation"/>
-   public class ClassDocumentation : ElementDocumentation, IClassDocumentation
+   /// <seealso cref="MemberDocumentation"/>
+   public class ClassDocumentation : TypeDocumentation, IClassDocumentation
    {
       #region Constants and Fields
 
@@ -32,24 +32,21 @@ namespace ConsoLovers.AutoDoc
       public ClassDocumentation(IDocumentationSource documentationSource, Type type)
          : base(documentationSource, type)
       {
-         OriginalType = type ?? throw new ArgumentNullException(nameof(type));
+         if (type == null)
+            throw new ArgumentNullException(nameof(type));
       }
 
       #endregion
 
       #region IClassDocumentation Members
 
+      /// <summary>Gets the assembly the class is defined in.</summary>
+
       /// <summary>Gets all available <see cref="IMethodDocumentation"/>s for this class.</summary>
       public IReadOnlyCollection<IMethodDocumentation> Methods => methods ?? (methods = CreateMethods().ToArray());
 
+      /// <summary>Gets all available <see cref="IPropertyDocumentation"/>s for this class.</summary>
       public IReadOnlyCollection<IPropertyDocumentation> Properties => properties ?? (properties = CreateProperties().ToArray());
-
-      #endregion
-
-      #region Public Properties
-
-      /// <summary>Gets the type the documentation was created for.</summary>
-      public Type OriginalType { get; }
 
       #endregion
 
@@ -67,14 +64,14 @@ namespace ConsoLovers.AutoDoc
 
       private EventInfo[] GetEvents()
       {
-         return OriginalType.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+         return Type.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
             .Where(x => !x.IsSpecialName && !x.GetCustomAttributes<ObsoleteAttribute>().Any())
             .ToArray();
       }
 
       private FieldInfo[] GetFields()
       {
-         return OriginalType.GetFields(
+         return Type.GetFields(
                BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.GetField | BindingFlags.SetField)
             .Where(x => !x.IsSpecialName && !x.GetCustomAttributes<ObsoleteAttribute>().Any() && !x.IsPrivate)
             .ToArray();
@@ -82,14 +79,14 @@ namespace ConsoLovers.AutoDoc
 
       private MethodInfo[] GetMethods()
       {
-         return OriginalType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.InvokeMethod)
+         return Type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.InvokeMethod)
             .Where(x => !x.IsSpecialName && !x.GetCustomAttributes<ObsoleteAttribute>().Any() && !x.IsPrivate)
             .ToArray();
       }
 
       PropertyInfo[] GetProperties()
       {
-         return OriginalType.GetProperties(
+         return Type.GetProperties(
                BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.GetProperty | BindingFlags.SetProperty)
             .Where(x => !x.IsSpecialName && !x.GetCustomAttributes<ObsoleteAttribute>().Any())
             .Where(

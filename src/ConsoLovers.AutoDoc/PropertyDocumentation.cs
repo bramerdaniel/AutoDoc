@@ -3,7 +3,7 @@
    using System;
    using System.Reflection;
 
-   public class PropertyDocumentation : ElementDocumentation, IPropertyDocumentation
+   public class PropertyDocumentation : MemberDocumentation, IPropertyDocumentation
    {
       #region Constructors and Destructors
 
@@ -15,6 +15,7 @@
          : base(documentationSource, propertyInfo)
       {
          PropertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
+         UserFriendlyTypeName = TypeNameHelper.GetUserFriendlyName(propertyInfo.PropertyType);
       }
 
       #endregion
@@ -23,6 +24,10 @@
 
       /// <summary>Gets the type of the property.</summary>
       public Type Type => PropertyInfo.PropertyType;
+
+      public string UserFriendlyTypeName { get; }
+
+      public string PropertyName => PropertyInfo.Name;
 
       #endregion
 

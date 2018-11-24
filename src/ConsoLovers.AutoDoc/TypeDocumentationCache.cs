@@ -6,6 +6,7 @@
 
 namespace ConsoLovers.AutoDoc
 {
+   using System;
    using System.Collections.Generic;
    using System.IO;
    using System.Reflection;
@@ -59,12 +60,11 @@ namespace ConsoLovers.AutoDoc
 
       private XDocument GetDocument(MemberInfo memberInfo)
       {
-         var declaringType = memberInfo.DeclaringType;
+         var declaringType = memberInfo.DeclaringType ?? memberInfo as Type;
          if (declaringType == null)
             return null;
 
          var assembly = declaringType.Assembly;
-
          if (!documentCache.ContainsKey(assembly))
          {
             var path = Path.ChangeExtension(assembly.Location, ".xml");
@@ -92,6 +92,9 @@ namespace ConsoLovers.AutoDoc
 
       private string GetMemberName(MemberInfo memberInfo)
       {
+         if (memberInfo is Type type)
+            return $"T:{type.FullName.Replace("+", ".")}";
+
          var declaringType = memberInfo.DeclaringType;
          if (declaringType == null || declaringType.FullName == null)
             return null;

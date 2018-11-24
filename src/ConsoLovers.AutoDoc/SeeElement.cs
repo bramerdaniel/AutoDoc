@@ -10,27 +10,43 @@ namespace ConsoLovers.AutoDoc
    using System.Diagnostics;
    using System.Xml.Linq;
 
+   using ConsoLovers.AutoDoc.DocuElements;
+
    [DebuggerDisplay("{Element.ToString()}")]
-   public class SeeElement : XDocElement
+   public class SeeElement : XDocXElement
    {
       #region Constructors and Destructors
 
+      /// <summary>Initializes a new instance of the <see cref="SeeElement"/> class.</summary>
+      /// <param name="seeElement">The see element.</param>
+      /// <exception cref="ArgumentException"></exception>
       public SeeElement(XElement seeElement)
+         : base(seeElement)
       {
-         Element = seeElement ?? throw new ArgumentNullException(nameof(seeElement));
+         if (Element.Name != "see")
+            throw new ArgumentException($"The element {seeElement} is not a <see /> element.");
+
+         Ref = Element.Attribute("cref")?.Value;
       }
 
       #endregion
 
       #region Public Properties
 
-      public override string RawText => Element.ToString();
+      /// <summary>Gets the string that  reference.</summary>
+      public string Ref { get; }
 
-      #endregion
+      public string FullTypeName
+      {
+         get
+         {
+            var refType = Ref;
+            if (Ref.Length > 1 && Ref[1] == ':')
+               refType = Ref.Substring(2);
 
-      #region Properties
-
-      protected XElement Element { get; }
+            return $"{refType}, {Element.Document?.Root?.Element("assembly")?.Element("name")?.Value}";
+         }
+      }
 
       #endregion
    }

@@ -14,8 +14,13 @@ namespace ConsoLovers.AutoDoc
    {
       #region Public Properties
 
+      /// <summary>Gets the name of the property.</summary>
+      string PropertyName { get; }
+
       /// <summary>Gets the type of the property.</summary>
       Type Type { get; }
+
+      string UserFriendlyTypeName { get; }
 
       #endregion
    }

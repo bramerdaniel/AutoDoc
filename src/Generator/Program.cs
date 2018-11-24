@@ -29,12 +29,14 @@ namespace Generator
       /// <param name="args">The arguments.</param>
       static void Main(string[] args)
       {
-         var engine = new DocumentationEngine();
-         engine.TypeSelector = new AssemblyTypeSelector(typeof(Program).Assembly);
-         engine.Processor = new ConsoleProcessor();
-         engine.GenerateDocumentation("docs");
+         var builder = Documentation.Setup()
+            .ForAssembly(typeof(Program).Assembly)
+            .ForAssembly(typeof(IMethodDocumentation).Assembly)
+            .WithMarkdownOutput("D:\\_md")
+            .GetBuilder();
 
-         Console.ReadLine();
+         builder.Build();
+         Console.WriteLine("Done");
       }
 
       #endregion

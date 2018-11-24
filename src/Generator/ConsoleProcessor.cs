@@ -7,6 +7,7 @@
 namespace Generator
 {
    using System;
+   using System.Collections.Generic;
 
    using ConsoLovers.AutoDoc;
 
@@ -32,5 +33,10 @@ namespace Generator
       }
 
       #endregion
+
+      public void Process(ICollection<IClassDocumentation> classDocumentations)
+      {
+         throw new NotImplementedException();
+      }
    }
 }

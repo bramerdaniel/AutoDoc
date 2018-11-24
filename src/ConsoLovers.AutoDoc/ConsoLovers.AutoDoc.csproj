@@ -20,8 +20,4 @@
     <None Remove="ConsoLovers.DocumentationToolkit.xml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="XmlDocumentation\" />
-  </ItemGroup>
-
 </Project>

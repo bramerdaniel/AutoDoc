@@ -1,7 +1,8 @@
 ﻿namespace Generator.TestTypes
 {
    using System;
-
+   
+   /// <summary>A class containing all types of members</summary>
    public class ClassWithAll
    {
       /// <summary>The field</summary>

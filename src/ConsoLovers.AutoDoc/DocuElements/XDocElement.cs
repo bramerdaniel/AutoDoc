@@ -4,14 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace ConsoLovers.AutoDoc
+namespace ConsoLovers.AutoDoc.DocuElements
 {
+   /// <summary>Representing one element in an a documentation</summary>
    public abstract class XDocElement
    {
       #region Public Properties
 
-      /// <summary>Gets or sets the raw text.</summary>
-      public abstract string RawText { get; }
+      /// <summary>Gets the element as raw text.</summary>
+      public abstract string AsString { get; }
 
       #endregion
    }
