@@ -10,6 +10,8 @@ namespace Generator
 
    using ConsoLovers.AutoDoc;
 
+   using Kuka.WorkVisual.Scripting;
+
    /// <summary>Entry point</summary>
    class Program
    {
@@ -30,8 +32,7 @@ namespace Generator
       static void Main(string[] args)
       {
          var builder = Documentation.Setup()
-            .ForAssembly(typeof(Program).Assembly)
-            .ForAssembly(typeof(IMethodDocumentation).Assembly)
+            .ForAssembly(typeof(IScriptingCell).Assembly)
             .WithMarkdownOutput("D:\\_md")
             .GetBuilder();
 

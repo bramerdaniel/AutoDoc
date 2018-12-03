@@ -46,11 +46,14 @@ namespace ConsoLovers.AutoDoc
                builder.AppendLine($"[{classDocumentation.Type.Name}]: #{classDocumentation.UserFriendlyName}");
             builder.AppendLine();
 
-            builder.AppendLine($"Description: {GetMarkDown(classDocumentation.Summary)}");
+            var description = GetMarkDown(classDocumentation.Summary);
+            if (!string.IsNullOrEmpty(description))
+               builder.AppendLine($"Description: {description}");
+
             builder.AppendLine();
             BuildMethodTable(builder, classDocumentation);
             builder.AppendLine();
-            BuildPropertyTable(builder, classDocumentation);
+            // BuildPropertyTable(builder, classDocumentation);
             builder.AppendLine();
          }
 
@@ -63,12 +66,25 @@ namespace ConsoLovers.AutoDoc
 
       private static void BuildMethodTable(StringBuilder builder, IClassDocumentation classDocumentation)
       {
+         if (classDocumentation.Methods.Count == 0)
+            return;
+
          builder.AppendLine("### Methods");
-         builder.AppendLine("ReturnType | Name | Description ");
-         builder.AppendLine("--- | ---| --- ");
+         builder.AppendLine(" Name | Description ");
+         builder.AppendLine(" ---| --- ");
          foreach (var method in classDocumentation.Methods)
          {
-            builder.AppendLine($" {GetReturnTypeMarkup(method)} | {method.MethodName}{MethodSignatureString(method)} | {GetMarkDown(method.Summary)}");
+            var simpleSig = $"{method.MethodName}{MethodSignatureString(method)}";
+            var fullSig = $"{method.UserFriendlyReturnTypeName} {method.MethodName}{MethodSignatureString(method)}".Replace(" ", "-");
+            builder.AppendLine($" [{simpleSig}](#{fullSig}) | {GetMarkDown(method.Summary)}");
+         }
+
+         builder.AppendLine();
+         foreach (var method in classDocumentation.Methods)
+         {
+            var fullSig = $"{method.UserFriendlyReturnTypeName} {method.MethodName}{MethodSignatureString(method)}";
+            builder.AppendLine("---");
+            builder.AppendLine($"#### {fullSig}");
          }
       }
 
@@ -79,7 +95,10 @@ namespace ConsoLovers.AutoDoc
 
       private static string MethodSignatureString(IMethodDocumentation method)
       {
-         return method.SignatureString.Replace("<", "\\<").Replace(">", "\\>");
+         var signatureString = method.SignatureString.Replace("<", "\\<").Replace(">", "\\>").Replace(",", ", ");
+         if (string.IsNullOrEmpty(signatureString))
+            return "()";
+         return signatureString;
       }
 
       private static void BuildPropertyTable(StringBuilder builder, IClassDocumentation classDocumentation)
