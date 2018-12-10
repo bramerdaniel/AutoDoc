@@ -8,13 +8,15 @@ namespace ConsoLovers.AutoDoc
 {
    using System;
 
-   public class InterfaceDocumentation : MemberDocumentation
+   public class InterfaceDocumentation : ComplexTypeDocumentation, IInterfaceDocumentation
    {
       #region Constructors and Destructors
 
       public InterfaceDocumentation(IDocumentationSource documentationSource, Type type)
          : base(documentationSource, type)
       {
+         if (!type.IsInterface)
+            throw new ArgumentException("The given type is not an interface", nameof(type));
       }
 
       #endregion

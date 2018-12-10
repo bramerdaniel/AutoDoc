@@ -16,7 +16,7 @@ namespace ConsoLovers.AutoDoc
    {
       #region Constants and Fields
 
-      private IReadOnlyCollection<XDoc> parameters;
+      private IReadOnlyCollection<ParameterXDoc> parameters;
 
       #endregion
 
@@ -25,6 +25,7 @@ namespace ConsoLovers.AutoDoc
       public MethodDocumentation(MethodInfo method, IDocumentationSource documentationSource)
          : base(documentationSource, method)
       {
+         Id = Guid.NewGuid().ToString("N");
          MethodInfo = method ?? throw new ArgumentNullException(nameof(method));
          UserFriendlyReturnTypeName = TypeNameHelper.GetUserFriendlyName(MethodInfo.ReturnType);
       }
@@ -50,11 +51,13 @@ namespace ConsoLovers.AutoDoc
       /// <summary>Gets the <see cref="MemberInfo"/> for this documentation.</summary>
       public MethodInfo MethodInfo { get; }
 
-      public IReadOnlyCollection<XDoc> Parameters => parameters ?? (parameters = CreateParameters().ToArray());
+      public IReadOnlyCollection<ParameterXDoc> Parameters => parameters ?? (parameters = CreateParameters().ToArray());
 
       public string SignatureString => GetSignature(MethodInfo);
 
       public string UserFriendlyReturnTypeName { get; }
+
+      public string Id { get; }
 
       private string GetSignature(MethodInfo methodInfo)
       {
@@ -76,7 +79,7 @@ namespace ConsoLovers.AutoDoc
 
       #region Methods
 
-      private IEnumerable<XDoc> CreateParameters()
+      private IEnumerable<ParameterXDoc> CreateParameters()
       {
          return DocumentationSource.GetParam(MethodInfo);
       }

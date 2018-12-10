@@ -28,7 +28,7 @@ namespace ConsoLovers.AutoDoc
 
       #region IDocumentationSource Members
 
-      public IEnumerable<XDoc> GetParam(MethodInfo memberInfo)
+      public IEnumerable<ParameterXDoc> GetParam(MethodInfo memberInfo)
       {
          if (memberInfo == null)
             throw new ArgumentNullException(nameof(memberInfo));
@@ -38,7 +38,7 @@ namespace ConsoLovers.AutoDoc
             yield break;
 
          foreach (var paramElement in element.Descendants("param"))
-            yield return XDoc.FromXElement(paramElement);
+            yield return new  ParameterXDoc(paramElement);
       }
 
       public XDoc GetReturns(MemberInfo memberInfo)
@@ -47,7 +47,7 @@ namespace ConsoLovers.AutoDoc
             throw new ArgumentNullException(nameof(memberInfo));
 
          var element = Cache.GetMemberElement(memberInfo);
-         return XDoc.FromXElement(element?.Element("returns"));
+         return new XDoc(element?.Element("returns"));
       }
 
       public XDoc GetSummary(MemberInfo memberInfo)
@@ -56,7 +56,7 @@ namespace ConsoLovers.AutoDoc
             throw new ArgumentNullException(nameof(memberInfo));
 
          var element = Cache.GetMemberElement(memberInfo);
-         return XDoc.FromXElement(element?.Element("summary"));
+         return new XDoc(element?.Element("summary"));
       }
 
       #endregion

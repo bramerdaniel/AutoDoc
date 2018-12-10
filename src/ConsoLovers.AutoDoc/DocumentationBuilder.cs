@@ -7,6 +7,7 @@
 namespace ConsoLovers.AutoDoc
 {
    using System;
+   using System.Collections.Generic;
    using System.Linq;
 
    public class DocumentationBuilder
@@ -35,7 +36,30 @@ namespace ConsoLovers.AutoDoc
       public void BuildInternal()
       {
          var documentationSource = new XmlDocumentationSource();
-         var documentations = TypeSelector.SelectTypes().Select(x => new ClassDocumentation(documentationSource, x)).ToArray();
+         IList<ITypeDocumentation> documentations = new List<ITypeDocumentation>();
+
+         foreach (var type in TypeSelector.SelectTypes())
+         {
+            if (type.IsInterface)
+            {
+               documentations.Add(new InterfaceDocumentation(documentationSource, type));
+            }
+            else if(type.IsClass)
+            {
+               documentations.Add(new ClassDocumentation(documentationSource, type));
+            }
+            else if (type.IsEnum)
+            {
+               documentations.Add(new EnumDocumentation(documentationSource, type));
+            }
+            else
+            {
+               documentations.Add(new StructDocumentation(documentationSource, type));
+            }
+            
+         }
+
+         // var documentations = TypeSelector.SelectTypes().Select(x => new ClassDocumentation(documentationSource, x)).ToArray();
 
          Processor.Process(documentations);
       }

@@ -23,11 +23,13 @@ namespace ConsoLovers.AutoDoc
       /// <summary>Gets the name of the method.</summary>
       string MethodName { get; }
 
-      IReadOnlyCollection<XDoc> Parameters { get; }
+      IReadOnlyCollection<ParameterXDoc> Parameters { get; }
 
       string SignatureString { get; }
 
       string UserFriendlyReturnTypeName { get; }
+
+      string Id { get; }
 
       #endregion
    }

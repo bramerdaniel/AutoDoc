@@ -4,6 +4,6 @@
 
    public interface IDocumentationProcessor
    {
-      void Process(ICollection<IClassDocumentation> classDocumentations);
+      void Process(ICollection<ITypeDocumentation> typDocumentations);
    }
 }

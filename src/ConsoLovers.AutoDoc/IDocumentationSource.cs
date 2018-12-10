@@ -13,7 +13,7 @@ namespace ConsoLovers.AutoDoc
    {
       #region Public Methods and Operators
 
-      IEnumerable<XDoc> GetParam(MethodInfo methodInfo);
+      IEnumerable<ParameterXDoc> GetParam(MethodInfo methodInfo);
 
       XDoc GetReturns(MemberInfo memberInfo);
 

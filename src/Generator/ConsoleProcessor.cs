@@ -38,5 +38,10 @@ namespace Generator
       {
          throw new NotImplementedException();
       }
+
+      public void Process(ICollection<ITypeDocumentation> classDocumentations)
+      {
+         throw new NotImplementedException();
+      }
    }
 }

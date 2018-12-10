@@ -32,29 +32,23 @@ namespace ConsoLovers.AutoDoc
 
       #region IDocumentationProcessor Members
 
-      public void Process(ICollection<IClassDocumentation> classDocumentations)
+      public void Process(ICollection<ITypeDocumentation> typDocumentations)
       {
          StringBuilder builder = new StringBuilder();
-         builder.AppendLine("# Bam");
+         builder.AppendLine("# Api documentation");
          builder.AppendLine();
 
-         foreach (var classDocumentation in classDocumentations)
+         foreach (var typeDocumentation in typDocumentations)
          {
-            builder.AppendLine($"## {classDocumentation.UserFriendlyName}");
-            builder.AppendLine($"[{classDocumentation.Type.FullName}]: #{classDocumentation.UserFriendlyName}");
-            if (classDocumentation.UserFriendlyName != classDocumentation.Type.Name)
-               builder.AppendLine($"[{classDocumentation.Type.Name}]: #{classDocumentation.UserFriendlyName}");
-            builder.AppendLine();
+            //if (typeDocumentation is IClassDocumentation classDocumentation)
+            //{
+            //   AppendClassDocumentation(builder, classDocumentation);
+            //}
 
-            var description = GetMarkDown(classDocumentation.Summary);
-            if (!string.IsNullOrEmpty(description))
-               builder.AppendLine($"Description: {description}");
-
-            builder.AppendLine();
-            BuildMethodTable(builder, classDocumentation);
-            builder.AppendLine();
-            // BuildPropertyTable(builder, classDocumentation);
-            builder.AppendLine();
+            if (typeDocumentation is IInterfaceDocumentation interfaceDocumentation)
+            {
+               AppendInterfaceDocumentation(builder, interfaceDocumentation);
+            }
          }
 
          WriteFile(builder);
@@ -64,41 +58,93 @@ namespace ConsoLovers.AutoDoc
 
       #region Methods
 
-      private static void BuildMethodTable(StringBuilder builder, IClassDocumentation classDocumentation)
+      private static void AppendClassDocumentation(StringBuilder builder, IClassDocumentation classDocumentation)
       {
          if (classDocumentation.Methods.Count == 0)
+            return;
+
+         builder.AppendLine($"## {classDocumentation.UserFriendlyName}");
+         builder.AppendLine($"[{classDocumentation.Type.FullName}]: #{classDocumentation.UserFriendlyName}");
+         if (classDocumentation.UserFriendlyName != classDocumentation.Type.Name)
+            builder.AppendLine($"[{classDocumentation.Type.Name}]: #{classDocumentation.UserFriendlyName}");
+         builder.AppendLine();
+
+         var description = GetMarkDown(classDocumentation.Summary);
+         if (!string.IsNullOrEmpty(description))
+            builder.AppendLine($"Description: {description}");
+
+         builder.AppendLine();
+         BuildMethodTable(builder, classDocumentation);
+         builder.AppendLine();
+         // BuildPropertyTable(builder, classDocumentation);
+         builder.AppendLine();
+      }
+
+      private static void AppendInterfaceDocumentation(StringBuilder builder, IInterfaceDocumentation interfaceDocumentation)
+      {
+         if (interfaceDocumentation.Methods.Count == 0)
+            return;
+
+         builder.AppendLine($"## {interfaceDocumentation.UserFriendlyName}");
+         builder.AppendLine($"[{interfaceDocumentation.Type.FullName}]: #{interfaceDocumentation.UserFriendlyName}");
+         if (interfaceDocumentation.UserFriendlyName != interfaceDocumentation.Type.Name)
+            builder.AppendLine($"[{interfaceDocumentation.Type.Name}]: #{interfaceDocumentation.UserFriendlyName}");
+         builder.AppendLine();
+
+         var description = GetMarkDown(interfaceDocumentation.Summary);
+         if (!string.IsNullOrEmpty(description))
+            builder.AppendLine($"Description: {description}");
+
+         builder.AppendLine();
+         BuildMethodTable(builder, interfaceDocumentation);
+         builder.AppendLine();
+         // BuildPropertyTable(builder, classDocumentation);
+         builder.AppendLine();
+      }
+
+      private static void AppendParameters(IMethodDocumentation method, StringBuilder builder)
+      {
+         if (method.Parameters.Count == 0)
+            return;
+
+         builder.AppendLine("***Parameters***  ");
+         builder.AppendLine(" Name | Description");
+         builder.AppendLine(" --- | ---");
+
+         foreach (var parameter in method.Parameters)
+            builder.AppendLine($"{parameter.Name} | {GetMarkDown(parameter)}");
+
+         builder.AppendLine();
+      }
+
+      private static void BuildMethodTable(StringBuilder builder, IComplexTypeDocumentation complexType)
+      {
+         if (complexType.Methods.Count == 0)
             return;
 
          builder.AppendLine("### Methods");
          builder.AppendLine(" Name | Description ");
          builder.AppendLine(" ---| --- ");
-         foreach (var method in classDocumentation.Methods)
+         foreach (var method in complexType.Methods)
          {
             var simpleSig = $"{method.MethodName}{MethodSignatureString(method)}";
-            var fullSig = $"{method.UserFriendlyReturnTypeName} {method.MethodName}{MethodSignatureString(method)}".Replace(" ", "-");
-            builder.AppendLine($" [{simpleSig}](#{fullSig}) | {GetMarkDown(method.Summary)}");
+            builder.AppendLine($" [{simpleSig}](#{method.Id}) | {GetMarkDown(method.Summary)}");
          }
 
          builder.AppendLine();
-         foreach (var method in classDocumentation.Methods)
+         foreach (var method in complexType.Methods)
          {
             var fullSig = $"{method.UserFriendlyReturnTypeName} {method.MethodName}{MethodSignatureString(method)}";
             builder.AppendLine("---");
+            builder.AppendLine($"<a id=\"{method.Id}\"></a>");
             builder.AppendLine($"#### {fullSig}");
+
+            builder.AppendLine("***Description***  ");
+            builder.AppendLine($"{GetMarkDown(method.Summary)}");
+            builder.AppendLine();
+
+            AppendParameters(method, builder);
          }
-      }
-
-      private static string GetReturnTypeMarkup(IMethodDocumentation method)
-      {
-         return $"[{method.UserFriendlyReturnTypeName}](#{method.UserFriendlyReturnTypeName})";
-      }
-
-      private static string MethodSignatureString(IMethodDocumentation method)
-      {
-         var signatureString = method.SignatureString.Replace("<", "\\<").Replace(">", "\\>").Replace(",", ", ");
-         if (string.IsNullOrEmpty(signatureString))
-            return "()";
-         return signatureString;
       }
 
       private static void BuildPropertyTable(StringBuilder builder, IClassDocumentation classDocumentation)
@@ -140,8 +186,6 @@ namespace ConsoLovers.AutoDoc
                {
                   builder.Append($"[{TypeNameHelper.GetUserFriendlyName(type)}](#{TypeNameHelper.GetUserFriendlyName(type)})");
                }
-
-
             }
             else if (element is TypeParamRefElement typeParamRef)
             {
@@ -158,6 +202,19 @@ namespace ConsoLovers.AutoDoc
          }
 
          return builder.ToString();
+      }
+
+      private static string GetReturnTypeMarkup(IMethodDocumentation method)
+      {
+         return $"[{method.UserFriendlyReturnTypeName}](#{method.UserFriendlyReturnTypeName})";
+      }
+
+      private static string MethodSignatureString(IMethodDocumentation method)
+      {
+         var signatureString = method.SignatureString.Replace("<", "\\<").Replace(">", "\\>").Replace(",", ", ");
+         if (string.IsNullOrEmpty(signatureString))
+            return "()";
+         return signatureString;
       }
 
       private void WriteFile(StringBuilder builder)

@@ -8,13 +8,15 @@ namespace ConsoLovers.AutoDoc
 {
    using System;
 
-   public class EnumDocumentation : MemberDocumentation
+   public class EnumDocumentation : TypeDocumentation
    {
       #region Constructors and Destructors
 
       public EnumDocumentation(IDocumentationSource documentationSource, Type type)
          : base(documentationSource, type)
       {
+         if (!type.IsEnum)
+            throw new ArgumentException("The given type is not an enum", nameof(type));
       }
 
       #endregion

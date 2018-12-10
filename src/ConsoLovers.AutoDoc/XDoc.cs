@@ -16,34 +16,32 @@ namespace ConsoLovers.AutoDoc
    {
       #region Public Properties
 
-      public static XDoc Empty { get; } = new XDoc();
+      public static XDoc Empty { get; } = new XDoc(null);
 
       public bool IsEmpty => Count == 0;
 
-      #endregion
-
-      #region Public Methods and Operators
-
-      public static XDoc FromXElement(XElement element)
+      public XDoc(XElement element)
       {
-         if (element == null)
-            return Empty;
+         if(element==null)
+            return;
 
-         var summary = new XDoc();
          foreach (var node in element.Nodes())
          {
             if (node is XElement child)
             {
-               summary.Add(GetElement(child));
+              Add(GetElement(child));
             }
             else
             {
-               summary.Add(new XDocTextElement(node.ToString()));
+               Add(new XDocTextElement(node.ToString()));
             }
          }
-
-         return summary;
+         
       }
+
+      #endregion
+
+      #region Public Methods and Operators
 
       public string GetRawText()
       {
@@ -58,7 +56,7 @@ namespace ConsoLovers.AutoDoc
 
       #region Methods
 
-      private static XDocElement GetElement(XElement element)
+      protected static XDocElement GetElement(XElement element)
       {
          if (element == null)
             return new XDocTextElement(string.Empty);
@@ -76,5 +74,17 @@ namespace ConsoLovers.AutoDoc
       }
 
       #endregion
+   }
+
+   public class ParameterXDoc : XDoc
+   {
+      public string Name { get;}
+
+      public ParameterXDoc(XElement element)
+         : base(element)
+      {
+         if (element != null)
+            Name = element.Attribute("name")?.Value;
+      }
    }
 }
