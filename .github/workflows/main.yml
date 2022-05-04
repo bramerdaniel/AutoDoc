@@ -57,11 +57,11 @@ jobs:
     - name: open file
       run: dir
 
-    - name: Cache file
-      uses: actions/cache@v3
-      with:
-        path: .
-        key:  ${{ jobs.create-file.steps.generate-uuid.outputs.uuid }}
+    #- name: Cache file
+    #  uses: actions/cache@v3
+    #  with:
+    #    path: .
+    #    key:  ${{ jobs.create-file.steps.generate-uuid.outputs.uuid }}
 
 
     - name: open file
