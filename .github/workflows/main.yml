@@ -1,0 +1,72 @@
+name: pass files
+
+on:
+  push:
+    branches-ignore: [ master ]
+  workflow_dispatch:
+
+jobs:
+  create-file:
+    runs-on: windows-latest
+
+    steps:
+    - name: create file
+      run: echo FromJob1  > theFile.txt
+    - name: create anoter file
+      run: echo otherContent  > secons.txt
+
+    - name: dir
+      run: dir
+
+    - name: mkdir direc
+      run: mkdir direc
+
+    - name: cd direc
+      run: cd direc
+
+    - name: create anoter file
+      run: echo changedTheContent  > secons.txt
+
+    - name: cd ..
+      run: cd ..
+
+    - name: dir
+      run: dir
+
+    - name: Set UUID
+      id: generate-uuid
+      uses: filipstefansson/uuid-action@v1
+      with:
+        name: guidName
+
+    - name: Cache file
+      uses: actions/cache@v3
+      with:
+        path: .
+        key:  ${{ steps.generate-uuid.outputs.uuid }}
+
+
+
+# Now comes another machine
+
+  use-file:
+    needs: create-file
+    runs-on: windows-latest
+
+    steps:
+    - name: open file
+      run: dir
+
+    - name: Cache file
+      uses: actions/cache@v3
+      with:
+        path: .
+        key:  ${{ jobs.create-file.steps.generate-uuid.outputs.uuid }}
+
+
+    - name: open file
+      run: dir
+    - name: open file
+      run: dir .
+
+  
