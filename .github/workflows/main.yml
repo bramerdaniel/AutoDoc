@@ -2,7 +2,7 @@ name: pass files
 
 on:
   push:
-    branches-ignore: [ master ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
